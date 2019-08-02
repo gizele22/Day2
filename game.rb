@@ -2,23 +2,26 @@
 old_sync = $stdout.sync
 $stdout.sync = true
 
-puts "Welcome To Lucky Number Game"
-puts "Guess The Lucky Number 1-100"
+# set initial values
+easy_secret = rand(1..10)
+medium_secret = rand(51..70)
+hard_secret = rand(71..100)
 
-easy_secret = rand(50..100)
-medium_secret = rand(20..49)
-hard_secret = rand(1..48)
+count = 1
+previous_tries = [] # << Array
+history = {} # << Hash
+chances = 6
+
+# start here
+puts "Welcome to Numix-Lucky Number"
+puts "Player Name"
+player_name = gets.chomp
 
 puts "Choose Your Level"
 puts "1 - Easy"
 puts "2 - Medium"
 puts "3 - Hard"
-
 choice = gets.to_i
-
-puts "Guess Your lucky Number. You Have Six Chances"
-# secret_number = 22
-guess = gets.chomp.to_i
 
 if choice == 1
   secret_number = easy_secret
@@ -28,10 +31,11 @@ elsif choice == 3
   secret_number = hard_secret
 end
 
-count = 1
-previous_tries = []
+puts "Guess Your lucky Number. You Have #{chances} Chances"
+# puts "Secret: #{secret_number}"
+guess = gets.chomp.to_i
 
-while count < 6
+while count < chances
   if secret_number != guess
     previous_tries << guess
     puts "Keep Calm and Try Again"
@@ -40,10 +44,24 @@ while count < 6
     guess = gets.to_i
   else
     puts "Congratulations! You Got It"
+
+    score = chances - count
+    history[player_name] = score
+
+    puts "LEADERBOARD"
+    puts history
+
     break
   end
 
-  if count == 6
+  if count == chances
     puts "Game Over"
+    puts "The Mystery Lucky Number Will be: #{secret_number}"
+
+    score = chances - count
+    history[player_name] = score
+
+    puts "LEADERBOARD"
+    puts history
   end
 end
